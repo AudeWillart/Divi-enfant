@@ -37,7 +37,7 @@ if ( ! is_page_template( 'page-template-blank.php' ) ) : ?>
 					}
 				?>
 
-						<p id="footer-info">&copy; 2010-<?php echo date('Y'); ?> Willart Editions</p>
+						<p id="footer-info">&copy; 2017-<?php echo date('Y'); ?> Votre entreprise</p>
 					</div>	<!-- .container -->
 				</div>
 			</footer> <!-- #main-footer -->

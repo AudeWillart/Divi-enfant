@@ -11,16 +11,6 @@ function divi_child_load_parent_css() {
 add_action( 'wp_enqueue_scripts', 'divi_child_load_parent_css' );
 
 /*==================================================================
-* Autoriser lecture pour les éditeurs dans Gravity Forms
-===================================================================*/
- 
- function wpc_gravity_forms() {
- 	$role = get_role('editor');
- 	$role->add_cap( 'gravityforms_view_entries' );
- }
- add_action('admin_init','wpc_gravity_forms');
-
-/*==================================================================
 * Installation automatique de plugins
 ===================================================================*/
 
@@ -101,8 +91,17 @@ $config = array(
 }
 
 /*==================================================================
+* Autoriser lecture pour les éditeurs dans Gravity Forms
+===================================================================*/
+ 
+ function wpc_gravity_forms() {
+   $role = get_role('editor');
+   $role->add_cap( 'gravityforms_view_entries' );
+ }
+ add_action('admin_init','wpc_gravity_forms');
+
+/*==================================================================
 Enregistre les modules personnalisés dans votre thème enfant
-Ajoutez ce code dans le fichier function.php de votre thème enfant.
 ===================================================================*/
 function divi_child_theme_setup_image() {
    if ( class_exists('ET_Builder_Module')) {
@@ -139,12 +138,32 @@ function divi_child_theme_setup_blurb_module() {
 add_action('wp', 'divi_child_theme_setup_blurb_module', 9999);
 
 /*==================================================================
-* Builder Divi toujours autorisé
+* Divi Builder
 ===================================================================*/
 
+// Divi builder toujours activé
 add_action('et_builder_always_enabled',function() {
 return true;
 });
+
+// Supprime le bouton "Utiliser l'éditeur par défaut" pour les articles
+function remove_divi_page_builder_post(){
+$screen = get_current_screen();
+if($screen->post_type == 'post'){
+echo '<style>#et_pb_toggle_builder{display:none;}</style>';
+}
+}
+add_action('admin_head', 'remove_divi_page_builder_post');
+
+// Supprime le bouton "Utiliser l'éditeur par défaut" pour les pages
+ 
+function remove_divi_page_builder_page(){
+$screen = get_current_screen();
+if($screen->post_type == 'page'){
+echo '<style>#et_pb_toggle_builder.et_pb_builder_is_used{display:none;}</style>';
+}
+}
+add_action('admin_head', 'remove_divi_page_builder_page');
 
 /*==================================================================
 Change la position de la sidebar par défaut. 
